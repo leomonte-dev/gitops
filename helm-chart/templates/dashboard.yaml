@@ -26,23 +26,33 @@ spec:
               value: "{{ .Values.dashboard.image.tag | default .Values.image.tag }}"
             - name: SERVICES
               value: "accounts:http://accounts-service:{{ (index .Values "accounts-service").service.port }},insurance:http://insurance-service:{{ (index .Values "insurance-service").service.port }},investments:http://investments-service:{{ (index .Values "investments-service").service.port }},loans:http://loans-service:{{ (index .Values "loans-service").service.port }}"
+          startupProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.dashboard.service.port }}
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 30
           livenessProbe:
             httpGet:
               path: /
               port: {{ .Values.dashboard.service.port }}
-            initialDelaySeconds: 3
+            periodSeconds: 15
+            timeoutSeconds: 10
+            failureThreshold: 5
           readinessProbe:
             httpGet:
               path: /
               port: {{ .Values.dashboard.service.port }}
-            initialDelaySeconds: 3
+            periodSeconds: 10
+            timeoutSeconds: 10
           resources:
             requests:
               cpu: 50m
               memory: 64Mi
             limits:
-              cpu: 100m
-              memory: 128Mi
+              cpu: "1"
+              memory: 256Mi
 ---
 apiVersion: v1
 kind: Service
