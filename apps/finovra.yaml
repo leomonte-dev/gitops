@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/leomonte-dev/gitops.git
     targetRevision: main     # Branch, tag, or commit SHA to track
-    path: k8s/plain-manifests
+    path: helm-chart
     directory:
       recurse: true          # Pick up every service folder under this path
   destination:
